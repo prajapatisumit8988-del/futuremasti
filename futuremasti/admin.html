@@ -6,10 +6,12 @@
 </head>
 <body>
 
+<!-- 🔐 SIMPLE PASSWORD -->
 <script>
 let pass = prompt("Enter Admin Password:");
-if(pass !== "1234"){
-    document.body.innerHTML = "<h2 style='text-align:center;color:red;margin-top:50px;'>Access Denied ❌</h2>";
+if (pass !== "1234") {
+    document.body.innerHTML =
+      "<h2 style='text-align:center;color:red;margin-top:50px;'>Access Denied ❌</h2>";
 }
 </script>
 
@@ -25,6 +27,41 @@ if(pass !== "1234"){
     <p id="msg" style="color: green; font-weight: bold;"></p>
 </div>
 
-<script src="script.js"></script>
+<!-- 🔥 FIREBASE ADMIN SCRIPT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-tawInUtP03jA7qiiodaR7b0M2wE0f4Y",
+  authDomain: "futuremasti.firebaseapp.com",
+  databaseURL: "https://futuremasti-default-rtdb.firebaseio.com",
+  projectId: "futuremasti",
+  storageBucket: "futuremasti.firebasestorage.app",
+  messagingSenderId: "768228855414",
+  appId: "1:768228855414:web:ef84c4ede75afe20b1d957"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.saveFuture = async function () {
+  const name = document.getElementById("adminName").value.trim().toLowerCase();
+  const future = document.getElementById("adminFuture").value.trim();
+
+  if (!name || !future) {
+    alert("नाम और भविष्य दोनों लिखो!");
+    return;
+  }
+
+  await set(ref(db, "futures/" + name), future);
+
+  document.getElementById("msg").innerText = "Future Saved Live ✔";
+
+  document.getElementById("adminName").value = "";
+  document.getElementById("adminFuture").value = "";
+};
+</script>
+
 </body>
 </html>

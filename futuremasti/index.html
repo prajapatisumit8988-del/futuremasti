@@ -16,6 +16,42 @@
     <div id="result"></div>
 </div>
 
-<script src="script.js"></script>
+<!-- 🔥 FIREBASE USER SCRIPT -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-tawInUtP03jA7qiiodaR7b0M2wE0f4Y",
+  authDomain: "futuremasti.firebaseapp.com",
+  databaseURL: "https://futuremasti-default-rtdb.firebaseio.com",
+  projectId: "futuremasti",
+  storageBucket: "futuremasti.firebasestorage.app",
+  messagingSenderId: "768228855414",
+  appId: "1:768228855414:web:ef84c4ede75afe20b1d957"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.showFuture = async function () {
+  const name = document.getElementById("username").value.trim().toLowerCase();
+  if (!name) {
+    alert("नाम लिखो!");
+    return;
+  }
+
+  const snap = await get(ref(db, "futures/" + name));
+
+  if (snap.exists()) {
+    document.getElementById("result").innerHTML =
+      name.toUpperCase() + " जी,<br>" + snap.val();
+  } else {
+    document.getElementById("result").innerHTML =
+      "कोई भविष्य नहीं मिला 😅";
+  }
+};
+</script>
+
 </body>
 </html>
