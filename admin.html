@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - FutureMasti</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+let pass = prompt("Enter Admin Password:");
+if(pass !== "1234"){
+    document.body.innerHTML = "<h2 style='text-align:center;color:red;margin-top:50px;'>Access Denied ❌</h2>";
+}
+</script>
+
+<div class="box">
+    <h1>⚙ Admin Panel</h1>
+    <p>किसी भी नाम का भविष्य यहाँ से बदलें</p>
+
+    <input id="adminName" placeholder="नाम लिखें...">
+    <textarea id="adminFuture" placeholder="भविष्य लिखें..." rows="3"></textarea>
+
+    <button onclick="saveFuture()">Save Future</button>
+
+    <p id="msg" style="color: green; font-weight: bold;"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
