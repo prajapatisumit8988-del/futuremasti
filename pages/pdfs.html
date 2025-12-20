@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>PDF / Books</h2>
+
+<script type="module">
+import { db } from "../firebase.js";
+import { ref, onValue } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+let cls = new URLSearchParams(location.search).get("class");
+
+onValue(ref(db, "content/" + cls + "/pdfs"), snap => {
+ snap.forEach(p => {
+  let d = p.val();
+  document.body.innerHTML += `
+   <a href="${d.link}" target="_blank">
+   📕 ${d.title}</a><br><br>`;
+ });
+});
+</script>
+
+</body>
+</html>
