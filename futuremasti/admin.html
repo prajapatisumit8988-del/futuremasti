@@ -1,36 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Panel - FutureMasti</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Admin Panel - StudyMasti</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
-<!-- 🔐 SIMPLE PASSWORD -->
+<!-- 🔐 PASSWORD -->
 <script>
-let pass = prompt("Enter Admin Password:");
+let pass = prompt("Admin Password:");
 if (pass !== "1234") {
     document.body.innerHTML =
-      "<h2 style='text-align:center;color:red;margin-top:50px;'>Access Denied ❌</h2>";
+    "<h2 style='text-align:center;color:red;margin-top:50px;'>Access Denied ❌</h2>";
 }
 </script>
 
 <div class="box">
     <h1>⚙ Admin Panel</h1>
-    <p>किसी भी नाम का भविष्य यहाँ से बदलें</p>
-
-    <input id="adminName" placeholder="नाम लिखें...">
-    <textarea id="adminFuture" placeholder="भविष्य लिखें..." rows="3"></textarea>
-
-    <button onclick="saveFuture()">Save Future</button>
-
-    <p id="msg" style="color: green; font-weight: bold;"></p>
+    <input id="title" placeholder="Video Title">
+    <input id="link" placeholder="YouTube Video ID">
+    <button onclick="addVideo()">Add Video</button>
+    <p id="msg"></p>
 </div>
 
 <!-- 🔥 FIREBASE ADMIN SCRIPT -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-tawInUtP03jA7qiiodaR7b0M2wE0f4Y",
@@ -45,21 +41,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.saveFuture = async function () {
-  const name = document.getElementById("adminName").value.trim().toLowerCase();
-  const future = document.getElementById("adminFuture").value.trim();
+window.addVideo = function () {
+    const title = document.getElementById("title").value;
+    const link = document.getElementById("link").value;
 
-  if (!name || !future) {
-    alert("नाम और भविष्य दोनों लिखो!");
-    return;
-  }
+    if (!title || !link) {
+        alert("All fields required");
+        return;
+    }
 
-  await set(ref(db, "futures/" + name), future);
-
-  document.getElementById("msg").innerText = "Future Saved Live ✔";
-
-  document.getElementById("adminName").value = "";
-  document.getElementById("adminFuture").value = "";
+    push(ref(db, "videos"), { title, link });
+    document.getElementById("msg").innerText = "Video Added Successfully ✔";
+    document.getElementById("title").value = "";
+    document.getElementById("link").value = "";
 };
 </script>
 

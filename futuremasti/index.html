@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>FutureMasti - Funny Future Predictor</title>
+    <title>StudyMasti - Online Education</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="box">
-    <h1>🔮 FutureMasti</h1>
-    <p>अपना नाम डालो और भविष्य देखो!</p>
-
-    <input id="username" placeholder="अपना नाम लिखें...">
-    <button onclick="showFuture()">भविष्य बताओ</button>
-
-    <div id="result"></div>
+    <h1>📚 StudyMasti</h1>
+    <p>Online Coaching Videos</p>
+    <div id="videos"></div>
 </div>
 
-<!-- 🔥 FIREBASE USER SCRIPT -->
+<!-- 🔥 FIREBASE STUDENT SCRIPT -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC-tawInUtP03jA7qiiodaR7b0M2wE0f4Y",
@@ -34,23 +30,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-window.showFuture = async function () {
-  const name = document.getElementById("username").value.trim().toLowerCase();
-  if (!name) {
-    alert("नाम लिखो!");
-    return;
-  }
+const videoDiv = document.getElementById("videos");
 
-  const snap = await get(ref(db, "futures/" + name));
-
-  if (snap.exists()) {
-    document.getElementById("result").innerHTML =
-      name.toUpperCase() + " जी,<br>" + snap.val();
-  } else {
-    document.getElementById("result").innerHTML =
-      "कोई भविष्य नहीं मिला 😅";
-  }
-};
+onValue(ref(db, "videos"), (snapshot) => {
+    videoDiv.innerHTML = "";
+    snapshot.forEach(child => {
+        const data = child.val();
+        videoDiv.innerHTML += `
+        <div class="video">
+            <h3>${data.title}</h3>
+            <iframe src="https://www.youtube.com/embed/${data.link}" allowfullscreen></iframe>
+        </div>
+        `;
+    });
+});
 </script>
 
 </body>
